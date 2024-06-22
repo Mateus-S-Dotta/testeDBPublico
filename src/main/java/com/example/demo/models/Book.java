@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.Objects;
 
@@ -29,15 +30,15 @@ public class Book {
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
-    @NotBlank
+    @NotBlank(groups = { CreateBook.class, UpdateBook.class })
     private String name;
 
     @Column(name = "publish", nullable = false)
-    @NotBlank
+    @NotNull(groups = { CreateBook.class, UpdateBook.class })
     private LocalDate publish;
 
-    @Column(name = "ISBN", nullable = false)
-    @NotBlank
+    @Column(name = "isbn", nullable = false)
+    @NotBlank(groups = { CreateBook.class, UpdateBook.class })
     @Size(min = 10, max = 13)
     private String isbn;
 

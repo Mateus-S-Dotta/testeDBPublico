@@ -15,45 +15,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.example.demo.models.Book;
-import com.example.demo.models.Book.CreateBook;
-import com.example.demo.models.Book.UpdateBook;
-import com.example.demo.services.BookService;
+import com.example.demo.models.Rent.UpdateRent;
+import com.example.demo.models.Rent.CreateRent;
+import com.example.demo.models.Rent;
+import com.example.demo.services.RentService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/rent")
 @Validated
-public class BookController {
+public class RentController {
     @Autowired
-    private BookService bookService;
+    private RentService rentService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> findById(@PathVariable Long id) {
-        Book obj = this.bookService.findById(id);
+    public ResponseEntity<Rent> findById(@PathVariable Long id) {
+        Rent obj = this.rentService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping
-    @Validated(CreateBook.class)
-    public ResponseEntity<Void> create(@Valid @RequestBody Book obj) {
-        this.bookService.create(obj);
+    @Validated(CreateRent.class)
+    public ResponseEntity<Void> create(@Valid @RequestBody Rent obj) {
+        this.rentService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
     @PutMapping("/{id}")
-    @Validated(UpdateBook.class)
-    public ResponseEntity<Void> update(@Valid @RequestBody Book obj, @PathVariable Long id) {
+    @Validated(UpdateRent.class)
+    public ResponseEntity<Void> update(@Valid @RequestBody Rent obj, @PathVariable Long id) {
         obj.setId(id);
-        this.bookService.update(obj);
+        this.rentService.update(obj);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        this.bookService.delete(id);
+        this.rentService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
