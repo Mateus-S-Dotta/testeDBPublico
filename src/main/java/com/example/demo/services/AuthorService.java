@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.models.Author;
 import com.example.demo.repositories.AuthorRepository;
-import com.example.demo.repositories.BookRepository;
 
 @Service
 public class AuthorService {
