@@ -6,41 +6,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.models.Author;
-import com.example.demo.repositories.AuthorRepository;
+import com.example.demo.models.Book;
 import com.example.demo.repositories.BookRepository;
 
 @Service
-public class AuthorService {
+public class BookService {
     @Autowired
-    private AuthorRepository authorRepository;
+    private BookRepository bookRepository;
 
-    public Author findById(Long id) {
-        Optional<Author> author = this.authorRepository.findById(id);
-        return author.orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
+    public Book findById(Long id) {
+        Optional<Book> book = this.bookRepository.findById(id);
+        return book.orElseThrow(() -> new RuntimeException("Author not found with id: " + id));
     }
 
     @Transactional
-    public Author create(Author obj) {
+    public Book create(Book obj) {
         obj.setId(null);
-        obj = this.authorRepository.save(obj);
+        obj = this.bookRepository.save(obj);
         return obj;
     }
 
     @Transactional
-    public Author update(Author obj) {
+    public Book update(Book obj) {
         if (obj.getId() == null) {
             throw new IllegalArgumentException("ID cannot be null for update operation");
         }
-        return this.authorRepository.save(obj);
+        return this.bookRepository.save(obj);
     }
 
     public void delete(Long id) {
         findById(id);
         try {
-            this.authorRepository.deleteById(id);
+            this.bookRepository.deleteById(id);
         } catch (Exception e) {
-            throw new RuntimeException("Error deleting author with ID" + id);
+            throw new RuntimeException("Error deleting book");
         }
     }
 }

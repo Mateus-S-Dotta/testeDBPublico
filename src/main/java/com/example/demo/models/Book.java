@@ -15,6 +15,12 @@ import java.util.Objects;
 @Entity
 @Table(name = Book.TABLE_NAME)
 public class Book {
+    public interface CreateBook {
+    }
+
+    public interface UpdateBook {
+    }
+
     public static final String TABLE_NAME = "book";
 
     @Id
