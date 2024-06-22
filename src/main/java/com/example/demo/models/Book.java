@@ -1,7 +1,6 @@
 package com.example.demo.models;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,17 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.Objects;
 
 @Entity
-@Table(name = Author.TABLE_NAME)
-public class Author {
-    public interface CreateAuthor {
-    }
-
-    public interface UpdateAuthor {
-    }
-
-    public static final String TABLE_NAME = "author";
+@Table(name = Book.TABLE_NAME)
+public class Book {
+    public static final String TABLE_NAME = "book";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,29 +23,26 @@ public class Author {
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
-    @NotBlank(groups = { CreateAuthor.class, UpdateAuthor.class })
+    @NotBlank
     private String name;
 
-    @Column(name = "gender")
-    private Boolean gender;
+    @Column(name = "publish", nullable = false)
+    @NotBlank
+    private LocalDate publish;
 
-    @Column(name = "birth")
-    private LocalDate birth;
+    @Column(name = "ISBN", nullable = false)
+    @NotBlank
+    @Size(min = 10, max = 13)
+    private String isbn;
 
-    @Column(name = "cpf", length = 11, nullable = false, unique = true)
-    @NotBlank(groups = { CreateAuthor.class, UpdateAuthor.class })
-    @Size(groups = { CreateAuthor.class, UpdateAuthor.class }, min = 11, max = 11)
-    private String cpf;
-
-    public Author() {
+    public Book() {
     }
 
-    public Author(Long id, String name, Boolean gender, LocalDate birth, String cpf) {
+    public Book(Long id, String name, LocalDate publish, String isbn) {
         this.id = id;
         this.name = name;
-        this.gender = gender;
-        this.birth = birth;
-        this.cpf = cpf;
+        this.publish = publish;
+        this.isbn = isbn;
     }
 
     public Long getId() {
@@ -70,32 +61,40 @@ public class Author {
         this.name = name;
     }
 
-    public Boolean isgender() {
-        return this.gender;
+    public LocalDate getPublish() {
+        return this.publish;
     }
 
-    public Boolean getgender() {
-        return this.gender;
+    public void setPublish(LocalDate publish) {
+        this.publish = publish;
     }
 
-    public void setgender(Boolean gender) {
-        this.gender = gender;
+    public String getIsbn() {
+        return this.isbn;
     }
 
-    public LocalDate getBirth() {
-        return this.birth;
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public void setBirth(LocalDate birth) {
-        this.birth = birth;
+    public Book id(Long id) {
+        setId(id);
+        return this;
     }
 
-    public String getCpf() {
-        return this.cpf;
+    public Book name(String name) {
+        setName(name);
+        return this;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public Book publish(LocalDate publish) {
+        setPublish(publish);
+        return this;
+    }
+
+    public Book isbn(String isbn) {
+        setIsbn(isbn);
+        return this;
     }
 
     @Override
@@ -104,17 +103,16 @@ public class Author {
             return true;
         if (o == null)
             return false;
-        if (!(o instanceof Author))
+        if (!(o instanceof Book))
             return false;
-        Author other = (Author) o;
+        Book other = (Book) o;
         if (this.id == null)
             if (other.id != null)
                 return false;
             else if (!this.id.equals(other.id))
                 return false;
         return Objects.equals(this.id, other.id) && Objects.equals(this.name, other.name)
-                && Objects.equals(this.gender, other.gender) && Objects.equals(this.birth, other.birth)
-                && Objects.equals(this.cpf, other.cpf);
+                && Objects.equals(this.publish, other.publish) && Objects.equals(this.isbn, other.isbn);
     }
 
     @Override
