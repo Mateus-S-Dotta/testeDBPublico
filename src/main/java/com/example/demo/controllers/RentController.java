@@ -38,6 +38,9 @@ public class RentController {
     @PostMapping
     @Validated(CreateRent.class)
     public ResponseEntity<Void> create(@Valid @RequestBody Rent obj) {
+        if (obj.getDevolution().isBefore(obj.getRetreat().plusDays(2))) {
+            obj.setDevolution(obj.getRetreat().plusDays(2));
+        }
         this.rentService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();

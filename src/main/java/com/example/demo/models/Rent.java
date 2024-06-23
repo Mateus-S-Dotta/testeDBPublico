@@ -42,17 +42,6 @@ public class Rent {
     @NotNull(groups = { CreateRent.class, UpdateRent.class })
     private LocalDate devolution;
 
-    public Rent(Long id, User user, LocalDate retreat) {
-        this.id = id;
-        this.user = user;
-        this.retreat = retreat;
-        if (retreat != null && !retreat.isBefore(LocalDate.now().plusDays(2))) {
-            this.devolution = retreat.plusDays(2);
-        } else {
-            this.devolution = LocalDate.now();
-        }
-    }
-
     public Rent() {
     }
 
