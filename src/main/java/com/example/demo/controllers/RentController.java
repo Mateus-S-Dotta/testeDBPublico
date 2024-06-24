@@ -46,7 +46,11 @@ public class RentController {
     @PostMapping
     @Validated
     public ResponseEntity<Void> create(@Valid @RequestBody Rent obj) {
-        if (obj.getDevolution().isBefore(obj.getRetreat().plusDays(2))) {
+        if (obj.getDevolution() != null) {
+            if (obj.getDevolution().isBefore(obj.getRetreat().plusDays(2))) {
+                obj.setDevolution(obj.getRetreat().plusDays(2));
+            }
+        } else {
             obj.setDevolution(obj.getRetreat().plusDays(2));
         }
         this.rentService.create(obj);

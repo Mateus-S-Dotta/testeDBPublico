@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.models.Author;
+import com.example.demo.models.Views;
 import com.example.demo.services.AuthorService;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.validation.Valid;
 
@@ -30,12 +32,14 @@ public class AuthorController {
     private AuthorService authorService;
 
     @GetMapping("/{id}")
+    @JsonView(Views.AuthorView.class)
     public ResponseEntity<Author> findById(@PathVariable Long id) {
         Author obj = this.authorService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
     @GetMapping
+    @JsonView(Views.AuthorView.class)
     public ResponseEntity<List<Author>> listAll(@RequestParam(required = false) String name) {
         if (name != null) {
             List<Author> obj = this.authorService.findByName(name);

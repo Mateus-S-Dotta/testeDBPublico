@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -26,28 +28,33 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
     @NotBlank
-    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private String name;
 
     @Column(name = "publish", nullable = false)
     @NotNull
-    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private LocalDate publish;
 
     @Column(name = "isbn", unique = true, nullable = false)
     @NotBlank
     @Size(min = 10, max = 13)
-    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private String isbn;
 
     @ManyToMany(mappedBy = "books")
     @JsonView(Views.BookView.class)
     private Set<Rent> rents;
+
+    @ManyToMany
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @JsonView(Views.BookView.class)
+    private Set<Author> authors;
 
     public Book() {
     }

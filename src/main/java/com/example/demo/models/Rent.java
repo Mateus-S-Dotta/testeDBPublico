@@ -16,7 +16,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = Rent.TABLE_NAME)
@@ -26,7 +25,7 @@ public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private Long id;
 
     @ManyToOne
@@ -35,13 +34,11 @@ public class Rent {
     private User user;
 
     @Column(name = "retreat", nullable = false)
-    @NotNull
-    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private LocalDate retreat = LocalDate.now();
 
     @Column(name = "devolution", nullable = false)
-    @NotNull
-    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private LocalDate devolution;
 
     @ManyToMany

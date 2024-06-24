@@ -2,12 +2,16 @@ package com.example.demo.models;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -20,22 +24,31 @@ public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
     @NotBlank
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private String name;
 
     @Column(name = "gender")
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private Boolean gender;
 
     @Column(name = "birth")
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private LocalDate birth;
 
     @Column(name = "cpf", length = 11, nullable = false, unique = true)
     @NotBlank
     @Size(min = 11, max = 11)
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private String cpf;
+
+    @ManyToMany(mappedBy = "authors")
+    @JsonView(Views.AuthorView.class)
+    private Set<Book> books;
 
     public Author() {
     }

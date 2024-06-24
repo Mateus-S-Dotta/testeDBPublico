@@ -9,4 +9,7 @@ public class Views {
 
     public static class BookView {
     }
+
+    public static class AuthorView {
+    }
 }
