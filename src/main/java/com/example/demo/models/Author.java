@@ -15,12 +15,6 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = Author.TABLE_NAME)
 public class Author {
-    public interface CreateAuthor {
-    }
-
-    public interface UpdateAuthor {
-    }
-
     public static final String TABLE_NAME = "author";
 
     @Id
@@ -29,7 +23,7 @@ public class Author {
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
-    @NotBlank(groups = { CreateAuthor.class, UpdateAuthor.class })
+    @NotBlank
     private String name;
 
     @Column(name = "gender")
@@ -39,8 +33,8 @@ public class Author {
     private LocalDate birth;
 
     @Column(name = "cpf", length = 11, nullable = false, unique = true)
-    @NotBlank(groups = { CreateAuthor.class, UpdateAuthor.class })
-    @Size(groups = { CreateAuthor.class, UpdateAuthor.class }, min = 11, max = 11)
+    @NotBlank
+    @Size(min = 11, max = 11)
     private String cpf;
 
     public Author() {

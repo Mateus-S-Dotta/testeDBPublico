@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.models.Book;
-import com.example.demo.models.Book.CreateBook;
-import com.example.demo.models.Book.UpdateBook;
 import com.example.demo.services.BookService;
 
 import jakarta.validation.Valid;
@@ -35,8 +34,14 @@ public class BookController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Book>> listAll() {
+        List<Book> books = this.bookService.findAll();
+        return ResponseEntity.ok().body(books);
+    }
+
     @PostMapping
-    @Validated(CreateBook.class)
+    @Validated
     public ResponseEntity<Void> create(@Valid @RequestBody Book obj) {
         this.bookService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -44,7 +49,7 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    @Validated(UpdateBook.class)
+    @Validated
     public ResponseEntity<Void> update(@Valid @RequestBody Book obj, @PathVariable Long id) {
         obj.setId(id);
         this.bookService.update(obj);

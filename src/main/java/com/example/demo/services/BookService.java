@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,5 +42,9 @@ public class BookService {
         } catch (Exception e) {
             throw new RuntimeException("Error deleting book");
         }
+    }
+
+    public List<Book> findAll() {
+        return bookRepository.findAll();
     }
 }

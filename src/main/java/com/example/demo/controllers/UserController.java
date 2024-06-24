@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.models.User;
-import com.example.demo.models.User.CreateUser;
-import com.example.demo.models.User.UpdateUser;
+import com.example.demo.models.Views;
 import com.example.demo.services.UserService;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.validation.Valid;
 
@@ -30,13 +31,21 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/{id}")
+    @JsonView(Views.UserView.class)
     public ResponseEntity<User> findById(@PathVariable Long id) {
         User obj = this.userService.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping
+    @JsonView(Views.UserView.class)
+    public ResponseEntity<List<User>> listAll() {
+        List<User> users = this.userService.findAll();
+        return ResponseEntity.ok().body(users);
+    }
+
     @PostMapping
-    @Validated(CreateUser.class)
+    @Validated
     public ResponseEntity<Void> create(@Valid @RequestBody User obj) {
         this.userService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -44,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @Validated(UpdateUser.class)
+    @Validated
     public ResponseEntity<Void> update(@Valid @RequestBody User obj, @PathVariable Long id) {
         obj.setId(id);
         this.userService.update(obj);

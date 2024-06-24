@@ -16,12 +16,6 @@ import java.util.Objects;
 @Entity
 @Table(name = Book.TABLE_NAME)
 public class Book {
-    public interface CreateBook {
-    }
-
-    public interface UpdateBook {
-    }
-
     public static final String TABLE_NAME = "book";
 
     @Id
@@ -30,15 +24,15 @@ public class Book {
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
-    @NotBlank(groups = { CreateBook.class, UpdateBook.class })
+    @NotBlank
     private String name;
 
     @Column(name = "publish", nullable = false)
-    @NotNull(groups = { CreateBook.class, UpdateBook.class })
+    @NotNull
     private LocalDate publish;
 
     @Column(name = "isbn", nullable = false)
-    @NotBlank(groups = { CreateBook.class, UpdateBook.class })
+    @NotBlank
     @Size(min = 10, max = 13)
     private String isbn;
 

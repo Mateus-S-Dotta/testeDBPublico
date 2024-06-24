@@ -1,13 +1,17 @@
 package com.example.demo.models;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -15,47 +19,53 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = User.TABLE_NAME)
 public class User {
-    public interface CreateUser {
-    }
-
-    public interface UpdateUser {
-    }
-
     public static final String TABLE_NAME = "user";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
-    @NotBlank(groups = { CreateUser.class, UpdateUser.class })
+    @NotBlank
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private String name;
 
     @Column(name = "gender")
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private Boolean gender;
 
     @Column(name = "cpf", length = 11, nullable = false, unique = true)
-    @NotBlank(groups = { CreateUser.class, UpdateUser.class })
-    @Size(groups = { CreateUser.class, UpdateUser.class }, min = 11, max = 11)
+    @NotBlank
+    @Size(min = 11, max = 11)
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private String cpf;
 
     @Column(name = "phone", length = 11, nullable = false)
-    @NotBlank(groups = { CreateUser.class, UpdateUser.class })
-    @Size(groups = { CreateUser.class, UpdateUser.class }, min = 11, max = 11)
+    @NotBlank
+    @Size(min = 11, max = 11)
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private String phone;
 
     @Column(name = "email", nullable = false, unique = true)
-    @NotBlank(groups = { CreateUser.class, UpdateUser.class })
+    @NotBlank
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private String email;
 
     @Column(name = "birth")
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private LocalDate birth;
+
+    @OneToMany(mappedBy = "user")
+    @JsonView(Views.UserView.class)
+    private List<Rent> rents;
 
     public User() {
     }
 
-    public User(Long id, String name, Boolean gender, String cpf, String phone, String email, LocalDate birth) {
+    public User(Long id, String name, Boolean gender, String cpf, String phone, String email, LocalDate birth,
+            List<Rent> rents) {
         this.id = id;
         this.name = name;
         this.gender = gender;
@@ -63,6 +73,7 @@ public class User {
         this.phone = phone;
         this.email = email;
         this.birth = birth;
+        this.rents = rents;
     }
 
     public Long getId() {
@@ -123,6 +134,14 @@ public class User {
 
     public void setBirth(LocalDate birth) {
         this.birth = birth;
+    }
+
+    public List<Rent> getRents() {
+        return this.rents;
+    }
+
+    public void setRents(List<Rent> rents) {
+        this.rents = rents;
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.example.demo.models;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,30 +18,28 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = Rent.TABLE_NAME)
 public class Rent {
-    public interface CreateRent {
-    }
-
-    public interface UpdateRent {
-    }
-
     public static final String TABLE_NAME = "rent";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @NotNull(groups = { CreateRent.class, UpdateRent.class })
+    @NotNull
+    @JsonView(Views.RentView.class)
     private User user;
 
     @Column(name = "retreat", nullable = false)
-    @NotNull(groups = { CreateRent.class, UpdateRent.class })
+    @NotNull
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private LocalDate retreat = LocalDate.now();
 
     @Column(name = "devolution", nullable = false)
-    @NotNull(groups = { CreateRent.class, UpdateRent.class })
+    @NotNull
+    @JsonView({ Views.UserView.class, Views.RentView.class })
     private LocalDate devolution;
 
     public Rent() {

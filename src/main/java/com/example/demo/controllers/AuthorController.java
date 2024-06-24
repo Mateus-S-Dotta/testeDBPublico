@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.models.Author;
-import com.example.demo.models.Author.CreateAuthor;
-import com.example.demo.models.Author.UpdateAuthor;
 import com.example.demo.services.AuthorService;
 
 import jakarta.validation.Valid;
@@ -35,8 +34,14 @@ public class AuthorController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping
+    public ResponseEntity<List<Author>> listAll() {
+        List<Author> authors = this.authorService.findAll();
+        return ResponseEntity.ok().body(authors);
+    }
+
     @PostMapping
-    @Validated(CreateAuthor.class)
+    @Validated
     public ResponseEntity<Void> create(@Valid @RequestBody Author obj) {
         this.authorService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -44,7 +49,7 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    @Validated(UpdateAuthor.class)
+    @Validated
     public ResponseEntity<Void> update(@Valid @RequestBody Author obj, @PathVariable Long id) {
         obj.setId(id);
         this.authorService.update(obj);

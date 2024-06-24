@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,9 @@ public class RentService {
         } catch (Exception e) {
             throw new RuntimeException("Error deleting rent with ID" + id);
         }
+    }
+
+    public List<Rent> findAll() {
+        return rentRepository.findAll();
     }
 }
