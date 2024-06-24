@@ -35,6 +35,7 @@ public class BookService {
         return this.bookRepository.save(obj);
     }
 
+    @Transactional
     public void delete(Long id) {
         findById(id);
         try {
@@ -44,7 +45,14 @@ public class BookService {
         }
     }
 
+    @Transactional
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
+
+    @Transactional
+    public List<Book> findByName(String name) {
+        return bookRepository.findByName(name);
+    }
+
 }

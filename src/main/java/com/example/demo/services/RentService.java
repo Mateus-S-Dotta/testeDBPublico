@@ -47,15 +47,7 @@ public class RentService {
         return this.rentRepository.save(obj);
     }
 
-    public void delete(Long id) {
-        findById(id);
-        try {
-            this.rentRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Error deleting rent with ID" + id);
-        }
-    }
-
+    @Transactional
     public List<Rent> findAll() {
         return rentRepository.findAll();
     }

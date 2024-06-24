@@ -34,6 +34,12 @@ public class BookController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Book>> findById(@PathVariable String name) {
+        List<Book> obj = this.bookService.findByName(name);
+        return ResponseEntity.ok().body(obj);
+    }
+
     @GetMapping
     public ResponseEntity<List<Book>> listAll() {
         List<Book> books = this.bookService.findAll();

@@ -34,6 +34,12 @@ public class AuthorController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/name/{name}")
+    public ResponseEntity<List<Author>> findById(@PathVariable String name) {
+        List<Author> obj = this.authorService.findByName(name);
+        return ResponseEntity.ok().body(obj);
+    }
+
     @GetMapping
     public ResponseEntity<List<Author>> listAll() {
         List<Author> authors = this.authorService.findAll();

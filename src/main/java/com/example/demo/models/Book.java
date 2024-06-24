@@ -31,7 +31,7 @@ public class Book {
     @NotNull
     private LocalDate publish;
 
-    @Column(name = "isbn", nullable = false)
+    @Column(name = "isbn", unique = true, nullable = false)
     @NotBlank
     @Size(min = 10, max = 13)
     private String isbn;

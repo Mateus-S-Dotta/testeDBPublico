@@ -35,6 +35,7 @@ public class AuthorService {
         return this.authorRepository.save(obj);
     }
 
+    @Transactional
     public void delete(Long id) {
         findById(id);
         try {
@@ -44,7 +45,13 @@ public class AuthorService {
         }
     }
 
+    @Transactional
     public List<Author> findAll() {
         return authorRepository.findAll();
+    }
+
+    @Transactional
+    public List<Author> findByName(String name) {
+        return authorRepository.findByName(name);
     }
 }
