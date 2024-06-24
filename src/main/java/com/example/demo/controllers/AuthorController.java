@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,14 +35,12 @@ public class AuthorController {
         return ResponseEntity.ok().body(obj);
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<List<Author>> findById(@PathVariable String name) {
-        List<Author> obj = this.authorService.findByName(name);
-        return ResponseEntity.ok().body(obj);
-    }
-
     @GetMapping
-    public ResponseEntity<List<Author>> listAll() {
+    public ResponseEntity<List<Author>> listAll(@RequestParam(required = false) String name) {
+        if (name != null) {
+            List<Author> obj = this.authorService.findByName(name);
+            return ResponseEntity.ok().body(obj);
+        }
         List<Author> authors = this.authorService.findAll();
         return ResponseEntity.ok().body(authors);
     }

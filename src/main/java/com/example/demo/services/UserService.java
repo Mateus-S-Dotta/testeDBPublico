@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.models.Rent;
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository;
 
@@ -14,6 +16,8 @@ import com.example.demo.repositories.UserRepository;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RentService rentService;
 
     public User findById(Long id) {
         Optional<User> user = this.userRepository.findById(id);
@@ -37,9 +41,26 @@ public class UserService {
 
     @Transactional
     public void delete(Long id) {
-        findById(id);
+        boolean hasActiveRents = rentService.hasActiveRents(id);
+        if (!hasActiveRents) {
+            try {
+                this.userRepository.deleteById(id);
+                return;
+            } catch (Exception e) {
+                throw new RuntimeException("Error deleting user with ID" + id);
+            }
+        }
+        List<Rent> activeRents = rentService.getActiveRents(id);
+        LocalDate today = LocalDate.now();
+        for (Rent rent : activeRents) {
+            if (rent.getDevolution().isAfter(today)) {
+                throw new RuntimeException(
+                        "O usuário possui aluguéis ativos com devolução no futuro e não pode ser excluído.");
+            }
+        }
         try {
             this.userRepository.deleteById(id);
+            return;
         } catch (Exception e) {
             throw new RuntimeException("Error deleting user with ID" + id);
         }

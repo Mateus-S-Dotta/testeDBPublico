@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,5 +51,17 @@ public class RentService {
     @Transactional
     public List<Rent> findAll() {
         return rentRepository.findAll();
+    }
+
+    @Transactional
+    public boolean hasActiveRents(Long userId) {
+        LocalDate today = LocalDate.now();
+        List<Rent> activeRents = rentRepository.findByUserIdAndDevolutionAfter(userId, today);
+        return !activeRents.isEmpty();
+    }
+
+    public List<Rent> getActiveRents(Long userId) {
+        LocalDate today = LocalDate.now();
+        return rentRepository.findByUserIdAndDevolutionAfter(userId, today);
     }
 }
