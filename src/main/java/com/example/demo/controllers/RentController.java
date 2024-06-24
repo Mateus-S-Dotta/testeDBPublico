@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -38,7 +39,25 @@ public class RentController {
 
     @GetMapping
     @JsonView(Views.RentView.class)
-    public ResponseEntity<List<Rent>> listAll() {
+    public ResponseEntity<List<Rent>> listAll(@RequestParam(required = false) String active,
+            @RequestParam(required = false) Long userId) {
+        if ("true".equals(active)) {
+            if (userId == null) {
+                List<Rent> rents = this.rentService.findByDevolutionAfter();
+                return ResponseEntity.ok().body(rents);
+            } else {
+                List<Rent> rents = this.rentService.findByUserIdAndDevolutionAfter(userId);
+                return ResponseEntity.ok().body(rents);
+            }
+        } else if ("false".equals(active)) {
+            if (userId == null) {
+                List<Rent> rents = this.rentService.findByDevolutionBefore();
+                return ResponseEntity.ok().body(rents);
+            } else {
+                List<Rent> rents = this.rentService.findByUserIdAndDevolutionBefore(userId);
+                return ResponseEntity.ok().body(rents);
+            }
+        }
         List<Rent> rents = this.rentService.findAll();
         return ResponseEntity.ok().body(rents);
     }

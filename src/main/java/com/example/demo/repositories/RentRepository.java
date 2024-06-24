@@ -14,4 +14,13 @@ import com.example.demo.models.Rent;
 public interface RentRepository extends JpaRepository<Rent, Long> {
     @Query("SELECT r FROM Rent r WHERE r.user.id = :userId AND r.devolution > :today")
     List<Rent> findByUserIdAndDevolutionAfter(@Param("userId") Long userId, @Param("today") LocalDate today);
+
+    @Query("SELECT r FROM Rent r WHERE r.user.id = :userId AND r.devolution < :today")
+    List<Rent> findByUserIdAndDevolutionBefore(@Param("userId") Long userId, @Param("today") LocalDate today);
+
+    @Query("SELECT r FROM Rent r WHERE r.devolution > :today")
+    List<Rent> findByDevolutionAfter(@Param("today") LocalDate today);
+
+    @Query("SELECT r FROM Rent r WHERE r.devolution < :today")
+    List<Rent> findByDevolutionBefore(@Param("today") LocalDate today);
 }

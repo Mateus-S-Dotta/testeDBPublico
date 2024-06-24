@@ -50,7 +50,7 @@ public class UserService {
                 throw new RuntimeException("Error deleting user with ID" + id);
             }
         }
-        List<Rent> activeRents = rentService.getActiveRents(id);
+        List<Rent> activeRents = rentService.findByUserIdAndDevolutionAfter(id);
         LocalDate today = LocalDate.now();
         for (Rent rent : activeRents) {
             System.out.println(rent.getDevolution());

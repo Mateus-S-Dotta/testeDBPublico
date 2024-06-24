@@ -60,8 +60,28 @@ public class RentService {
         return !activeRents.isEmpty();
     }
 
-    public List<Rent> getActiveRents(Long userId) {
+    @Transactional
+    public List<Rent> findByUserIdAndDevolutionAfter(Long userId) {
         LocalDate today = LocalDate.now();
         return rentRepository.findByUserIdAndDevolutionAfter(userId, today);
     }
+
+    @Transactional
+    public List<Rent> findByDevolutionAfter() {
+        LocalDate today = LocalDate.now();
+        return rentRepository.findByDevolutionAfter(today);
+    }
+
+    @Transactional
+    public List<Rent> findByUserIdAndDevolutionBefore(Long userId) {
+        LocalDate today = LocalDate.now();
+        return rentRepository.findByUserIdAndDevolutionBefore(userId, today);
+    }
+
+    @Transactional
+    public List<Rent> findByDevolutionBefore() {
+        LocalDate today = LocalDate.now();
+        return rentRepository.findByDevolutionBefore(today);
+    }
+
 }
