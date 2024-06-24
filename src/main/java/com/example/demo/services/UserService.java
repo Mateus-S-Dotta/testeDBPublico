@@ -53,6 +53,7 @@ public class UserService {
         List<Rent> activeRents = rentService.getActiveRents(id);
         LocalDate today = LocalDate.now();
         for (Rent rent : activeRents) {
+            System.out.println(rent.getDevolution());
             if (rent.getDevolution().isAfter(today)) {
                 throw new RuntimeException(
                         "O usuário possui aluguéis ativos com devolução no futuro e não pode ser excluído.");

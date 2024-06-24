@@ -6,4 +6,7 @@ public class Views {
 
     public static class RentView {
     }
+
+    public static class BookView {
+    }
 }

@@ -2,6 +2,7 @@ package com.example.demo.models;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonView;
 
@@ -11,6 +12,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -23,33 +26,38 @@ public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @NotNull
     @JsonView(Views.RentView.class)
     private User user;
 
     @Column(name = "retreat", nullable = false)
     @NotNull
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private LocalDate retreat = LocalDate.now();
 
     @Column(name = "devolution", nullable = false)
     @NotNull
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private LocalDate devolution;
+
+    @ManyToMany
+    @JoinTable(name = "rent_book", joinColumns = @JoinColumn(name = "rent_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
+    @JsonView(Views.RentView.class)
+    private Set<Book> books;
 
     public Rent() {
     }
 
-    public Rent(Long id, User user, LocalDate retreat, LocalDate devolution) {
+    public Rent(Long id, User user, LocalDate retreat, LocalDate devolution, Set<Book> books) {
         this.id = id;
         this.user = user;
         this.retreat = retreat;
         this.devolution = devolution;
+        this.books = books;
     }
 
     public Long getId() {
@@ -82,6 +90,14 @@ public class Rent {
 
     public void setDevolution(LocalDate devolution) {
         this.devolution = devolution;
+    }
+
+    public Set<Book> getBooks() {
+        return this.books;
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
     }
 
     @Override

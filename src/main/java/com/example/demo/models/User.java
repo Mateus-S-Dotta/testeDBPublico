@@ -24,37 +24,37 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
     @NotBlank
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private String name;
 
     @Column(name = "gender")
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private Boolean gender;
 
     @Column(name = "cpf", length = 11, nullable = false, unique = true)
     @NotBlank
     @Size(min = 11, max = 11)
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private String cpf;
 
     @Column(name = "phone", length = 11, nullable = false)
     @NotBlank
     @Size(min = 11, max = 11)
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private String phone;
 
     @Column(name = "email", nullable = false, unique = true)
     @NotBlank
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private String email;
 
     @Column(name = "birth")
-    @JsonView({ Views.UserView.class, Views.RentView.class })
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private LocalDate birth;
 
     @OneToMany(mappedBy = "user")

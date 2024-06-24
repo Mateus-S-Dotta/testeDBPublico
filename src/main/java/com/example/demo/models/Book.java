@@ -7,11 +7,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
 import java.util.Objects;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = Book.TABLE_NAME)
@@ -21,29 +26,38 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private Long id;
 
     @Column(name = "name", length = 100, nullable = false)
     @NotBlank
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private String name;
 
     @Column(name = "publish", nullable = false)
     @NotNull
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private LocalDate publish;
 
     @Column(name = "isbn", unique = true, nullable = false)
     @NotBlank
     @Size(min = 10, max = 13)
+    @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class })
     private String isbn;
+
+    @ManyToMany(mappedBy = "books")
+    @JsonView(Views.BookView.class)
+    private Set<Rent> rents;
 
     public Book() {
     }
 
-    public Book(Long id, String name, LocalDate publish, String isbn) {
+    public Book(Long id, String name, LocalDate publish, String isbn, Set<Rent> rents) {
         this.id = id;
         this.name = name;
         this.publish = publish;
         this.isbn = isbn;
+        this.rents = rents;
     }
 
     public Long getId() {
@@ -96,6 +110,14 @@ public class Book {
     public Book isbn(String isbn) {
         setIsbn(isbn);
         return this;
+    }
+
+    public Set<Rent> getRents() {
+        return this.rents;
+    }
+
+    public void setRents(Set<Rent> rents) {
+        this.rents = rents;
     }
 
     @Override
