@@ -16,6 +16,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = Rent.TABLE_NAME)
@@ -31,6 +32,7 @@ public class Rent {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonView(Views.RentView.class)
+    @NotNull
     private User user;
 
     @Column(name = "retreat", nullable = false)
@@ -44,6 +46,7 @@ public class Rent {
     @ManyToMany
     @JoinTable(name = "rent_book", joinColumns = @JoinColumn(name = "rent_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
     @JsonView(Views.RentView.class)
+    @NotNull
     private Set<Book> books;
 
     public Rent() {

@@ -11,6 +11,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -46,7 +48,8 @@ public class Author {
     @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private String cpf;
 
-    @ManyToMany(mappedBy = "authors")
+    @ManyToMany
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
     @JsonView(Views.AuthorView.class)
     private Set<Book> books;
 
@@ -126,7 +129,7 @@ public class Author {
                 return false;
         return Objects.equals(this.id, other.id) && Objects.equals(this.name, other.name)
                 && Objects.equals(this.gender, other.gender) && Objects.equals(this.birth, other.birth)
-                && Objects.equals(this.cpf, other.cpf);
+                && Objects.equals(this.cpf, other.cpf) && Objects.equals(this.books, other.books);
     }
 
     @Override

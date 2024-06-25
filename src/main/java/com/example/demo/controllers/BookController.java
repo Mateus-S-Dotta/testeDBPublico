@@ -38,6 +38,13 @@ public class BookController {
         return ResponseEntity.ok().body(obj);
     }
 
+    @GetMapping("/findByUser/{id}")
+    @JsonView(Views.BookView.class)
+    public ResponseEntity<List<Book>> findDistinctBooksByUserId(@PathVariable Long id) {
+        List<Book> obj = this.bookService.findDistinctBooksByUserId(id);
+        return ResponseEntity.ok().body(obj);
+    }
+
     @GetMapping
     @JsonView(Views.BookView.class)
     public ResponseEntity<List<Book>> listAll(@RequestParam(required = false) String name,
@@ -61,6 +68,7 @@ public class BookController {
     @PostMapping
     @Validated
     public ResponseEntity<Void> create(@Valid @RequestBody Book obj) {
+        System.out.println(obj.getAuthors());
         this.bookService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -75,8 +83,8 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        this.bookService.delete(id);
+    public ResponseEntity<Void> deleteIfNoRent(@PathVariable Long id) {
+        this.bookService.deleteIfNoRent(id);
         return ResponseEntity.noContent().build();
     }
 }

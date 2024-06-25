@@ -2,6 +2,7 @@ package com.example.demo.models;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,13 +48,15 @@ public class Book {
     @JsonView({ Views.BookView.class, Views.RentView.class, Views.UserView.class, Views.AuthorView.class })
     private String isbn;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
+    @JoinTable(name = "rent_book", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "rent_id"))
     @JsonView(Views.BookView.class)
     private Set<Rent> rents;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
     @JsonView(Views.BookView.class)
+    @NotNull
     private Set<Author> authors;
 
     public Book() {
@@ -99,32 +102,20 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public Book id(Long id) {
-        setId(id);
-        return this;
-    }
-
-    public Book name(String name) {
-        setName(name);
-        return this;
-    }
-
-    public Book publish(LocalDate publish) {
-        setPublish(publish);
-        return this;
-    }
-
-    public Book isbn(String isbn) {
-        setIsbn(isbn);
-        return this;
-    }
-
     public Set<Rent> getRents() {
         return this.rents;
     }
 
     public void setRents(Set<Rent> rents) {
         this.rents = rents;
+    }
+
+    public Set<Author> getAuthors() {
+        return this.authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
     }
 
     @Override
@@ -142,7 +133,8 @@ public class Book {
             else if (!this.id.equals(other.id))
                 return false;
         return Objects.equals(this.id, other.id) && Objects.equals(this.name, other.name)
-                && Objects.equals(this.publish, other.publish) && Objects.equals(this.isbn, other.isbn);
+                && Objects.equals(this.publish, other.publish) && Objects.equals(this.isbn, other.isbn)
+                && Objects.equals(this.authors, other.authors) && Objects.equals(this.rents, other.rents);
     }
 
     @Override

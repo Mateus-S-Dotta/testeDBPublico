@@ -36,10 +36,10 @@ public class BookService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void deleteIfNoRent(Long id) {
         findById(id);
         try {
-            this.bookRepository.deleteById(id);
+            this.bookRepository.deleteIfNoRent(id);
         } catch (Exception e) {
             throw new RuntimeException("Error deleting book");
         }
@@ -63,5 +63,10 @@ public class BookService {
     @Transactional
     public List<Book> findBooksByDevolutionAfter() {
         return bookRepository.findBooksByDevolutionAfter();
+    }
+
+    @Transactional
+    public List<Book> findDistinctBooksByUserId(Long userId) {
+        return bookRepository.findDistinctBooksByUserId(userId);
     }
 }

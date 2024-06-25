@@ -62,6 +62,7 @@ public class AuthorController {
     @PostMapping
     @Validated
     public ResponseEntity<Void> create(@Valid @RequestBody Author obj) {
+        System.out.println(obj.getBooks());
         this.authorService.create(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
         return ResponseEntity.created(uri).build();
