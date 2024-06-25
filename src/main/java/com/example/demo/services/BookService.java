@@ -55,4 +55,13 @@ public class BookService {
         return bookRepository.findByName(name);
     }
 
+    @Transactional
+    public List<Book> findAvailableBooks() {
+        return bookRepository.findAvailableBooks();
+    }
+
+    @Transactional
+    public List<Book> findBooksByDevolutionAfter() {
+        return bookRepository.findBooksByDevolutionAfter();
+    }
 }

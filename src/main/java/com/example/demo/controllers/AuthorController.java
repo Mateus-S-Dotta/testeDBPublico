@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.models.Author;
+import com.example.demo.models.Book;
 import com.example.demo.models.Views;
 import com.example.demo.services.AuthorService;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -36,6 +38,14 @@ public class AuthorController {
     public ResponseEntity<Author> findById(@PathVariable Long id) {
         Author obj = this.authorService.findById(id);
         return ResponseEntity.ok().body(obj);
+    }
+
+    @GetMapping("/{id}/books")
+    @JsonView(Views.AuthorView.class)
+    public ResponseEntity<Set<Book>> findByAuthorBooksId(@PathVariable Long id) {
+        Author obj = this.authorService.findById(id);
+        Set<Book> books = obj.getBooks();
+        return ResponseEntity.ok().body(books);
     }
 
     @GetMapping

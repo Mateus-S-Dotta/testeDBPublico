@@ -53,12 +53,13 @@ public class Author {
     public Author() {
     }
 
-    public Author(Long id, String name, Boolean gender, LocalDate birth, String cpf) {
+    public Author(Long id, String name, Boolean gender, LocalDate birth, String cpf, Set<Book> books) {
         this.id = id;
         this.name = name;
         this.gender = gender;
         this.birth = birth;
         this.cpf = cpf;
+        this.books = books;
     }
 
     public Long getId() {
@@ -103,6 +104,26 @@ public class Author {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public Boolean isGender() {
+        return this.gender;
+    }
+
+    public Boolean getGender() {
+        return this.gender;
+    }
+
+    public void setGender(Boolean gender) {
+        this.gender = gender;
+    }
+
+    public Set<Book> getBooks() {
+        return this.books;
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
     }
 
     @Override

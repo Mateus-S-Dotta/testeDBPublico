@@ -14,4 +14,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT a FROM Book a WHERE a.name LIKE %:name%")
     List<Book> findByName(@Param("name") String name);
 
+    @Query("SELECT b FROM Rent r JOIN r.books b WHERE r.devolution >= CURRENT_DATE")
+    List<Book> findBooksByDevolutionAfter();
+
+    @Query("SELECT DISTINCT b FROM Book b WHERE b NOT IN (SELECT b FROM Book b JOIN b.rents r WHERE r.devolution >= CURRENT_DATE)")
+    List<Book> findAvailableBooks();
 }

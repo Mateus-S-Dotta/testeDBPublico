@@ -40,10 +40,17 @@ public class BookController {
 
     @GetMapping
     @JsonView(Views.BookView.class)
-    public ResponseEntity<List<Book>> listAll(@RequestParam(required = false) String name) {
+    public ResponseEntity<List<Book>> listAll(@RequestParam(required = false) String name,
+            @RequestParam(required = false) String active) {
         if (name != null) {
             List<Book> obj = this.bookService.findByName(name);
             return ResponseEntity.ok().body(obj);
+        } else if ("true".equals(active)) {
+            List<Book> books = this.bookService.findAvailableBooks();
+            return ResponseEntity.ok().body(books);
+        } else if ("false".equals(active)) {
+            List<Book> books = this.bookService.findBooksByDevolutionAfter();
+            return ResponseEntity.ok().body(books);
         }
         List<Book> books = this.bookService.findAll();
         return ResponseEntity.ok().body(books);
