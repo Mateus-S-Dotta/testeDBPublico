@@ -78,10 +78,6 @@ public class Author {
         this.name = name;
     }
 
-    public Boolean isgender() {
-        return this.gender;
-    }
-
     public Boolean getgender() {
         return this.gender;
     }
@@ -104,18 +100,6 @@ public class Author {
 
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    public Boolean isGender() {
-        return this.gender;
-    }
-
-    public Boolean getGender() {
-        return this.gender;
-    }
-
-    public void setGender(Boolean gender) {
-        this.gender = gender;
     }
 
     public Set<Book> getBooks() {

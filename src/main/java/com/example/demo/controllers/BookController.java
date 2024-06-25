@@ -46,9 +46,11 @@ public class BookController {
             List<Book> obj = this.bookService.findByName(name);
             return ResponseEntity.ok().body(obj);
         } else if ("true".equals(active)) {
+            System.out.println("true");
             List<Book> books = this.bookService.findAvailableBooks();
             return ResponseEntity.ok().body(books);
         } else if ("false".equals(active)) {
+            System.out.println("false");
             List<Book> books = this.bookService.findBooksByDevolutionAfter();
             return ResponseEntity.ok().body(books);
         }
