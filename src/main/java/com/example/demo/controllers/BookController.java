@@ -83,8 +83,8 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteIfNoRent(@PathVariable Long id) {
-        this.bookService.deleteIfNoRent(id);
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        this.bookService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

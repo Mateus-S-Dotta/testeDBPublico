@@ -22,7 +22,4 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT DISTINCT b FROM Book b JOIN b.rents r WHERE r.user.id = :userId")
     List<Book> findDistinctBooksByUserId(@Param("userId") Long userId);
-
-    @Query("DELETE FROM Book b WHERE b.id = :bookId AND b NOT IN (SELECT b FROM Book b JOIN b.rents r)")
-    Long deleteIfNoRent(@Param("bookId") Long bookId);
 }

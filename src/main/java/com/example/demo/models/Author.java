@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PreRemove;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -52,6 +53,13 @@ public class Author {
     @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
     @JsonView(Views.AuthorView.class)
     private Set<Book> books;
+
+    @PreRemove
+    private void preventDeleteIfHasBooks() {
+        if (!this.books.isEmpty()) {
+            throw new IllegalStateException("Não é possível excluir um autor que possui livros associados.");
+        }
+    }
 
     public Author() {
     }

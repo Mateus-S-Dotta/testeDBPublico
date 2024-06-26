@@ -2,7 +2,6 @@ package com.example.demo.models;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -53,11 +53,18 @@ public class Book {
     @JsonView(Views.BookView.class)
     private Set<Rent> rents;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany
     @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
     @JsonView(Views.BookView.class)
     @NotNull
     private Set<Author> authors;
+
+    @PrePersist
+    public void ensureBooksNotEmpty() {
+        if (this.authors == null || this.authors.isEmpty()) {
+            throw new IllegalStateException("Ao menos um autor deve ser associado à requisição de livros.");
+        }
+    }
 
     public Book() {
     }

@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -48,6 +49,13 @@ public class Rent {
     @JsonView(Views.RentView.class)
     @NotNull
     private Set<Book> books;
+
+    @PrePersist
+    public void ensureBooksNotEmpty() {
+        if (this.books == null || this.books.isEmpty()) {
+            throw new IllegalStateException("Ao menos um livro deve ser associado à requisição de aluguel.");
+        }
+    }
 
     public Rent() {
     }

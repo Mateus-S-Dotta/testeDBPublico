@@ -2,12 +2,14 @@ package com.example.demo.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.models.Book;
+import com.example.demo.models.Rent;
 import com.example.demo.repositories.BookRepository;
 
 @Service
@@ -36,10 +38,16 @@ public class BookService {
     }
 
     @Transactional
-    public void deleteIfNoRent(Long id) {
-        findById(id);
+    public void deleteById(Long id) {
         try {
-            this.bookRepository.deleteIfNoRent(id);
+            Optional<Book> optionalBook = this.bookRepository.findById(id);
+            if (optionalBook.isPresent()) {
+                Book book = optionalBook.get();
+                Set<Rent> rents = book.getRents();
+                if (rents.isEmpty()) {
+                    this.bookRepository.deleteById(id);
+                }
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error deleting book");
         }
