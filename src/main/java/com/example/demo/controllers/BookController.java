@@ -77,6 +77,8 @@ public class BookController {
     @PutMapping("/{id}")
     @Validated
     public ResponseEntity<Void> update(@Valid @RequestBody Book obj, @PathVariable Long id) {
+        Book book = this.bookService.findById(id);
+        obj.setRents(book.getRents());
         obj.setId(id);
         this.bookService.update(obj);
         return ResponseEntity.noContent().build();

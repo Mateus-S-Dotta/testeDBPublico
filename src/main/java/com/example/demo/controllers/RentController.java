@@ -81,6 +81,13 @@ public class RentController {
     @Validated
     public ResponseEntity<Void> update(@Valid @RequestBody Rent obj, @PathVariable Long id) {
         obj.setId(id);
+        if (obj.getDevolution() != null) {
+            if (obj.getDevolution().isBefore(obj.getRetreat().plusDays(2))) {
+                obj.setDevolution(obj.getRetreat().plusDays(2));
+            }
+        } else {
+            obj.setDevolution(obj.getRetreat().plusDays(2));
+        }
         this.rentService.update(obj);
         return ResponseEntity.noContent().build();
     }
